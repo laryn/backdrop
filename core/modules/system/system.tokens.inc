@@ -645,3 +645,30 @@ function system_tokens($type, $tokens, array $data = array(), array $options = a
 
   return $replacements;
 }
+
+/**
+ * Helper function for getting all available image attributes.
+ *
+ * @return array
+ *   All of the available image attributes.
+ */
+function _system_image_attributes() {
+  return array(
+    'style_name' => NULL,
+    'path' => NULL,
+    'path:relative' => NULL,
+    'width' => NULL,
+    'height' => NULL,
+    'extension' => NULL,
+    'filesize' => NULL,
+    'alt' => '',
+    'title' => NULL,
+    'mimetype' => NULL,
+    'render' => '',
+    'first' => '',
+    'second' => '',
+    'third' => '',
+    'last' => '',
+    'uri' => '',
+  );
+}
