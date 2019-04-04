@@ -31,6 +31,16 @@ function system_token_info() {
     'description' => t('Tokens related to uploaded files.'),
     'needs-data' => 'file',
   );
+  $types['image-field'] = array(
+    'name' => t('Image field'),
+    'description' => t('Tokens related to image fields.'),
+    'needs-data' => 'image-field',
+  );
+  $types['image-style'] = array(
+    'name' => t('Image style'),
+    'description' => t('Tokens related to image styles.'),
+    'needs-data' => 'image-style',
+  );
   $types['url'] = array(
     'name' => t('URL'),
     'description' => t('Tokens related to URLs.'),
@@ -255,6 +265,26 @@ function system_token_info() {
     'description' => t('The user who originally uploaded the file.'),
     'type' => 'user',
   );
+  
+  // Image style tokens.
+  $styles = image_styles();
+  $styles_tokens = array();
+  $image_style = array();
+
+  foreach ($styles as $style => $desc) {
+    $styles_tokens[$style] = array(
+      'name' => $style,
+      'description' => t("@s image style", array("@s" => $style)),
+      'type' => 'image-style',
+    );
+    foreach (_system_image_attributes() as $attribute => $none) {
+      $image_style[$attribute] = array(
+        'name' => $attribute,
+        'description' => t("@s image style attribute: @a", array("@s" => $style, "@a" => $attribute)),
+      );
+    }
+  }
+
 
   return array(
     'types' => $types,
@@ -266,6 +296,8 @@ function system_token_info() {
       'array' => $array,
       'date' => $date,
       'file' => $file,
+      'image-field' => $styles_tokens,
+      'image-style' => $image_style,
     ),
   );
 }
