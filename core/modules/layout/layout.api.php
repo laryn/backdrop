@@ -10,19 +10,23 @@
  */
 
 /**
- * Provides a list of layouts that can be used within the Layout module.
+ * Provides a list of layout templates that can be used within the Layout
+ * module.
  *
- * This hook returns an array keyed by a unique identifier for a layout name.
+ * This hook returns an array keyed by a unique identifier for a layout template
+ * name.
  *
- * The contents of this hook are merged with layout information provided by
- * stand-alone layouts with their own .info files. Generally, the data returned
- * here matches the keys used within layout .info files.
+ * The contents of this hook are merged with layout template information
+ * provided by stand-alone layout templates with their own .info files.
+ * Generally, the data returned here matches the keys used within layout
+ * template .info files.
  *
  * @return array
  *   Each item in the returned array of info should have the following keys:
- *   - title: The human-readable name of the layout.
- *   - path: A local path within the providing module to files needed by this
- *     layout, such as associated CSS, the icon image, and template file.
+ *   - title: The human-readable name of the layout template.
+ *   - path: A local path within the providing module to files needed by this   <<<<<<< HEAD
+ *     layout template, such as associated CSS, the icon image, and tpl.php
+ *     file.
  *   - regions: A list of regions this layout provides, keyed by a machine name
  *     with a human label value.
  *   - is_full_page: Optional. A boolean indicating whether this layout is
@@ -31,16 +35,51 @@
  *   - preview: Optional. An image representing the appearance of this layout.
  *     If left empty, "preview.png" will be used.
  *   - stylesheets: An array of CSS file used whenever this layout is presented.
- *     If left empty, "one-column.css" will be used for all media types.
+ *     If left empty, "one-column.css" will be used for all media types.   =======
+ *     layout template, such as associated CSS, the icon image, and tpl.php
+ *     file.
+ *   - regions: A list of regions this layout template provides, keyed by a
+ *     machine name with a human label value.
+ *   - preview: Optional. An image representing the appearance of this layout
+ *     template. If left empty, "preview.png" will be used.
+ *   - stylesheets: An array of CSS file used whenever this layout template
+ *     is presented. If left empty, "one-column.css" will be used for all media
+ *     types.   >>>>>>> docwilmot/rename-layout-info
  *   - template: The name of the template file (without the extension) used for
- *     this layout. All layouts should always be named with a "layout--" prefix,
- *     so that the default variables may be provided in
+ *     this layout template. Layout templates should always be named with a
+ *     "layout--" prefix, so that the default variables may be provided in
  *     template_preprocess_layout(). If left empty, "layout--[key]" will be
- *     used, with underscores converted to hyphens in the layout key.
- *   - file: The name of a PHP file to be included prior to any rendering of
- *     this layout. This may be used to provide preprocess functions to prepare
- *     variables for the use of the layout.
+ *     used, with underscores converted to hyphens in the layout template key.
+ *   - file: Optional. The name of a PHP file to be included prior to any
+ *     rendering of this layout template. This may be used to provide preprocess
+ *     functions to prepare variables for the use of the layout template.
  */
+function hook_layout_template_info() {
+  $layout_templates['my_layout_template'] = array(
+    'title' => t('A custom layout template'),
+    'path' => 'layouts/my-layout-template',
+    'regions' => array(
+      'header' => t('Header'),
+      'content' => t('Content'),
+      'sidebar' => t('Sidebar'),
+      'footer' => t('Footer'),
+    ),
+
+    // Optional information that populates using defaults.
+    // 'preview' => 'preview.png',
+    // 'stylesheets' => array('all' => array('one-column.css')),
+    // 'template' => 'layout--my-layout-template',.
+    // Specify a file containing preprocess functions if needed.
+    // 'file' => 'my_layout_template.php',.
+  );
+  return $layout_templates;
+}
+
+  /**
+   * Deprecated. Now replaced by hook_layout_template_info().
+   *
+   * @deprecated since 1.29.0
+   */
 function hook_layout_info() {
   $layouts['my_layout'] = array(
     'title' => t('A custom layout'),
@@ -56,10 +95,9 @@ function hook_layout_info() {
     // 'preview' => 'preview.png',
     // 'stylesheets' => array('all' => array('one-column.css')),
     // 'template' => 'layout--my-layout',
-    // 'is_full_page' => TRUE,
-
+    // 'is_full_page' => TRUE,.
     // Specify a file containing preprocess functions if needed.
-    // 'file' => 'my_layout.php',
+    // 'file' => 'my_layout.php',.
   );
   return $layouts;
 }
@@ -387,7 +425,6 @@ function hook_layout_load_by_router_item_alter(&$layouts, $router_item) {
   // begin previewed. But we want to display it using a layout whose system path
   // is node/%. So we choose those layouts and set the context from the
   // tempstore node.
-
   // Check path structure before checking node type because
   // node_type_get_types() is expensive; don't call it if we don't need to.
   $map = $router_item['map'];
@@ -475,7 +512,7 @@ function hook_layout_load_by_router_item_alter(&$layouts, $router_item) {
  *     of the hooks for hook_block_configure(), hook_block_save(), and
  *     hook_block_view(). This class should be a sub-class of the Block class.
  *
- * For a detailed usage example, see block_example.module.
+ *   For a detailed usage example, see block_example.module.
  *
  * @see hook_block_configure()
  * @see hook_block_save()
@@ -545,7 +582,7 @@ function hook_block_info_alter(&$blocks) {
  *   A configuration form, if one is needed for your block beyond the standard
  *   elements that the block module provides (block title, visibility, etc.).
  *
- * For a detailed usage example, see block_example.module.
+ *   For a detailed usage example, see block_example.module.
  *
  * @see hook_block_info()
  * @see hook_block_save()
@@ -621,7 +658,7 @@ function hook_block_save($delta, &$edit = array()) {
  *     (preferable) or a string containing rendered HTML content. If the content
  *     is empty the block will not be shown.
  *
- * For a detailed usage example, see block_example.module.
+ *   For a detailed usage example, see block_example.module.
  *
  * @see hook_block_info()
  * @see hook_block_view_alter()
