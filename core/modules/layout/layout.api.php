@@ -24,27 +24,19 @@
  * @return array
  *   Each item in the returned array of info should have the following keys:
  *   - title: The human-readable name of the layout template.
- *   - path: A local path within the providing module to files needed by this   <<<<<<< HEAD
- *     layout template, such as associated CSS, the icon image, and tpl.php
- *     file.
- *   - regions: A list of regions this layout provides, keyed by a machine name
- *     with a human label value.
- *   - is_full_page: Optional. A boolean indicating whether this layout is
- *     intended to be used as a full page layout. If left empty, the default
- *     value is TRUE, which will insert header and footer regions on the layout.
- *   - preview: Optional. An image representing the appearance of this layout.
- *     If left empty, "preview.png" will be used.
- *   - stylesheets: An array of CSS file used whenever this layout is presented.
- *     If left empty, "one-column.css" will be used for all media types.   =======
+ *   - path: A local path within the providing module to files needed by this
  *     layout template, such as associated CSS, the icon image, and tpl.php
  *     file.
  *   - regions: A list of regions this layout template provides, keyed by a
  *     machine name with a human label value.
+ *   - is_full_page: Optional. A boolean indicating whether this layout is
+ *     intended to be used as a full page layout. If left empty, the default
+ *     value is TRUE, which will insert header and footer regions on the layout.
  *   - preview: Optional. An image representing the appearance of this layout
  *     template. If left empty, "preview.png" will be used.
  *   - stylesheets: An array of CSS file used whenever this layout template
  *     is presented. If left empty, "one-column.css" will be used for all media
- *     types.   >>>>>>> docwilmot/rename-layout-info
+ *     types.
  *   - template: The name of the template file (without the extension) used for
  *     this layout template. Layout templates should always be named with a
  *     "layout--" prefix, so that the default variables may be provided in
@@ -68,9 +60,10 @@ function hook_layout_template_info() {
     // Optional information that populates using defaults.
     // 'preview' => 'preview.png',
     // 'stylesheets' => array('all' => array('one-column.css')),
-    // 'template' => 'layout--my-layout-template',.
+    // 'template' => 'layout--my-layout-template',
+
     // Specify a file containing preprocess functions if needed.
-    // 'file' => 'my_layout_template.php',.
+    // 'file' => 'my_layout_template.php',
   );
   return $layout_templates;
 }
@@ -95,9 +88,10 @@ function hook_layout_info() {
     // 'preview' => 'preview.png',
     // 'stylesheets' => array('all' => array('one-column.css')),
     // 'template' => 'layout--my-layout',
-    // 'is_full_page' => TRUE,.
+    // 'is_full_page' => TRUE,
+
     // Specify a file containing preprocess functions if needed.
-    // 'file' => 'my_layout.php',.
+    // 'file' => 'my_layout.php',
   );
   return $layouts;
 }
