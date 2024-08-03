@@ -81,7 +81,7 @@ class LayoutRendererFlexible {
    * Render the entire editor HTML and attach meta data.
    *
    * @return string
-   *  Themed & rendered HTML output.
+   *   Themed & rendered HTML output.
    */
   function render() {
     $this->addMeta();
@@ -157,7 +157,7 @@ class LayoutRendererFlexible {
       'title' => t('Delete row'),
       'href' => 'admin/structure/layouts/settings/flexible-template/' . $this->layout_info['name'] . '/row/' . $region_id . '/delete',
       'query' => array(
-        'token' => backdrop_get_token('layout-region-' . $region_id)
+        'token' => backdrop_get_token('layout-region-' . $region_id),
       ),
       'attributes' => array(
         'class' => array('use-ajax'),

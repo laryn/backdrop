@@ -603,7 +603,7 @@ function layout_page_menu_item(array $menu, array $access_arguments, array $page
   switch ($menu['type']) {
     case 'normal':
       $item['type'] = MENU_NORMAL_ITEM;
-      // Insert item into the proper menu
+      // Insert item into the proper menu.
       $item['menu_name'] = $menu['name'];
       break;
     case 'tab':
@@ -1543,7 +1543,7 @@ function _layout_get_all_info($data_type, $init = array()) {
         else {
           $info['path'] = $module_path;
         }
-
+// @todo: maybe we need $key.$layout_template_type as key
         $all_info[$data_type][$key] = $info;
       }
     }
@@ -1612,6 +1612,8 @@ function layout_get_layout_template_info($template_name = NULL, $rebuild = FALSE
         'hidden' => FALSE,
         'preview' => 'preview.png',
         'default region' => 'content',
+        'is_full_page' => TRUE,
+        'layout_template_type' => 'layout',
         'stylesheets' => array(
           'all' => array(str_replace('_', '-', $name) . '.css'),
         ),
@@ -1653,7 +1655,7 @@ function layout_get_layout_template_info($template_name = NULL, $rebuild = FALSE
  * @param string $layout_name
  *   The name of the layout template, e.g. "one_column" or
  *   "three_three_four_column". If no layout template is specified, all layout
- *  info will be returned.
+ *   info will be returned.
  *
  * @return array|boolean
  *   The layout template information, as returned by either a stand-alone
@@ -1700,7 +1702,7 @@ function layout_relationships_get_relevant_info($contexts) {
   $relationships = _layout_get_all_info('layout_relationship');
 
   foreach ($contexts as $context) {
-    // Go through each relationship
+    // Go through each relationship.
     foreach ($relationships as $rid => $relationship) {
       $handler = layout_create_handler('layout_relationship', $rid);
       if ($children = $handler->getChildren($rid)) {
@@ -2330,28 +2332,28 @@ function layout_flexible_template_load($flexible_template_name = NULL) {
 }
 
 /**
- * Load all flexible templates.
+ * Load flexible templates by type. Defaults to 'flexible'.
  *
  * @return LayoutFlexibleTemplate[]
  */
-function layout_flexible_template_load_all() {
+function layout_flexible_template_load_all($flexible_type = 'flexible') {
   $templates = &backdrop_static(__FUNCTION__, array());
 
   if (empty($templates)) {
-    $cache = cache()->get('layout:flexible:config');
+    $cache = cache()->get('layout:' . $flexible_type . ':config');
     if ($cache && $cache->data) {
       $configs = $cache->data;
     }
     else {
       $configs = array();
-      $config_names = config_get_names_with_prefix('layout.flexible.');
+      $config_names = config_get_names_with_prefix('layout.' . $flexible_type . '.');
       foreach ($config_names as $config_file) {
         $config = config($config_file);
         $data = $config->get();
         $configs[$data['name']] = $data;
       }
 
-      cache()->set('layout:flexible:config', $configs);
+      cache()->set('layout:' . $flexible_type . ':config', $configs);
     }
 
     foreach ($configs as $template_name => $config) {
@@ -2369,7 +2371,7 @@ function layout_layout_info() {
   $layouts = array();
   $styles = layout_flexible_row_styles();
 
-  $flexible_templates = layout_flexible_template_load_all();
+  $flexible_templates = layout_flexible_template_load_all('flexible');
   foreach ($flexible_templates as $flexible_template) {
     $layouts[$flexible_template->name] = array(
       'title' => $flexible_template->title,
@@ -2635,7 +2637,7 @@ function layout_flexible_row_styles() {
  * Utility function to clean CSS for Layout UI.
  *
  * @param string $classes
- *  CSS classes, as entered into the Layout user interface.
+ *   CSS classes, as entered into the Layout user interface.
  *
  * @return string
  *   String of sanitized classes separated by spaces.

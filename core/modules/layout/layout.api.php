@@ -25,6 +25,9 @@
  *     layout, such as associated CSS, the icon image, and template file.
  *   - regions: A list of regions this layout provides, keyed by a machine name
  *     with a human label value.
+ *   - is_full_page: Optional. A boolean indicating whether this layout is
+ *     intended to be used as a full page layout. If left empty, the default
+ *     value is TRUE, which will insert header and footer regions on the layout.
  *   - preview: Optional. An image representing the appearance of this layout.
  *     If left empty, "preview.png" will be used.
  *   - stylesheets: An array of CSS file used whenever this layout is presented.
@@ -53,6 +56,7 @@ function hook_layout_info() {
     // 'preview' => 'preview.png',
     // 'stylesheets' => array('all' => array('one-column.css')),
     // 'template' => 'layout--my-layout',
+    // 'is_full_page' => TRUE,
 
     // Specify a file containing preprocess functions if needed.
     // 'file' => 'my_layout.php',

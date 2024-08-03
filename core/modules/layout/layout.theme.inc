@@ -11,7 +11,7 @@ function theme_layout_reorder_layouts($variables) {
   $element = $variables['element'];
   $rows = array();
 
-  // Assemble the data for a table from everything in $form['handlers']
+  // Assemble the data for a table from everything in $form['handlers'].
   foreach (element_children($element) as $layout_name) {
     if (isset($element[$layout_name]['title'])) {
       $row = array();
@@ -49,7 +49,7 @@ function theme_layout_info($variables) {
   $layout = $variables['layout'];
   $info = layout_get_layout_template_info($layout->layout_template);
 
-  // Build template thumbnail preview
+  // Build template thumbnail preview.
   $preview_path = $info['path'] . '/' . $info['preview'];
   $preview_img = theme('image', array('path' => $preview_path));
   $preview = l($preview_img, 'admin/structure/layouts/manage/' . $layout->name, array('html' => TRUE));
@@ -79,7 +79,7 @@ function theme_layout_info($variables) {
 function theme_layout_condition_info($variables) {
   /* @var Layout $layout */
   $layout = $variables['layout'];
-  // Build a list of visibility conditions on this layout
+  // Build a list of visibility conditions on this layout.
   $conditions = array();
   foreach ($layout->conditions as $access_key => $layout_access) {
     $conditions[] = $layout_access->summary();
@@ -127,7 +127,7 @@ function theme_layout_template_option($variables) {
 function theme_layout_template_info($variables) {
   $template_info = $variables['template_info'];
 
-  // Build template thumbnail preview
+  // Build template thumbnail preview.
   $preview_path = $template_info['path'] . '/' . $template_info['preview'];
   $preview_img = theme('image', array('path' => $preview_path));
 
@@ -326,7 +326,7 @@ function layout_preprocess_layout(&$variables) {
 
   // Build HTML for displaying flexible templates.
   if (isset($variables['layout_info']['template']) && ($variables['layout_info']['template'] == 'layout--flexible')) {
-    if (is_a($variables['renderer'], 'LayoutRendererFlexible')) {
+    if (is_object($variables['renderer']) && !empty($variables['layout_info']['flexible'])) {
       $variables['flexible_editor'] = TRUE;
       $flexible_layout = layout_flexible_tempstore_load($variables['layout_info']['name']);
     }

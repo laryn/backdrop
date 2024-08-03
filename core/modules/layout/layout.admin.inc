@@ -3329,6 +3329,7 @@ function layout_settings_page($form, &$form_state) {
     }
 
     // Build the list of possible options, either enabled or not hidden.
+    // @todo: Only show standard or flexible templates here.
     if ($is_default || !$template_info['hidden']) {
       $rows[$template_name] = array(
         'layout_template_info' => theme('layout_template_info', array('template_info' => $template_info)),
