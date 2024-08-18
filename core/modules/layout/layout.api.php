@@ -61,6 +61,7 @@ function hook_layout_template_info() {
     // 'preview' => 'preview.png',
     // 'stylesheets' => array('all' => array('one-column.css')),
     // 'template' => 'layout--my-layout-template',
+    // 'is_full_page' => TRUE,
 
     // Specify a file containing preprocess functions if needed.
     // 'file' => 'my_layout_template.php',
@@ -88,8 +89,6 @@ function hook_layout_info() {
     // 'preview' => 'preview.png',
     // 'stylesheets' => array('all' => array('one-column.css')),
     // 'template' => 'layout--my-layout',
-    // 'is_full_page' => TRUE,
-
     // Specify a file containing preprocess functions if needed.
     // 'file' => 'my_layout.php',
   );

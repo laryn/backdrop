@@ -1544,7 +1544,7 @@ function _layout_get_all_info($data_type, $init = array()) {
         else {
           $info['path'] = $module_path;
         }
-// @todo: maybe we need $key.$layout_template_type as key
+        // @todo: maybe we need $key.$layout_template_type as key
         $all_info[$data_type][$key] = $info;
       }
     }
@@ -2284,9 +2284,11 @@ function layout_get_title_description(Layout $layout) {
  *
  * @param LayoutFlexibleTemplate $flexible_template
  *   The loaded flexible template object.
+ * @param string $flexible_template_type
+ *   The type of flexible template to save. Defaults to 'flexible'.
  */
-function layout_flexible_tempstore_set(LayoutFlexibleTemplate $flexible_template) {
-  tempstore_set('layout.flexible', $flexible_template->name, $flexible_template, 604800);
+function layout_flexible_tempstore_set(LayoutFlexibleTemplate $flexible_template, $flexible_template_type = 'flexible') {
+  tempstore_set('layout.' . $flexible_template_type, $flexible_template->name, $flexible_template, 604800);
 }
 
 /**
@@ -2297,19 +2299,21 @@ function layout_flexible_tempstore_set(LayoutFlexibleTemplate $flexible_template
  *
  * @param string $flexible_template_name
  *   The machine name of the flexible template to load.
+ * @param string $flexible_template_type
+ *   The type of flexible template to load. Defaults to 'flexible'.
  *
  * @return LayoutFlexibleTemplate
  *   The flexible template object.
  */
-function layout_flexible_tempstore_load($flexible_template_name = NULL) {
+function layout_flexible_tempstore_load($flexible_template_name = NULL, $flexible_template_type = 'flexible') {
   if (!$flexible_template_name) {
     return new LayoutFlexibleTemplate();
   }
 
   $caches = &backdrop_static(__FUNCTION__, array());
   if (!isset($caches[$flexible_template_name])) {
-    if (!$item = tempstore_get('layout.flexible', $flexible_template_name)) {
-      $item = layout_flexible_template_load($flexible_template_name);
+    if (!$item = tempstore_get('layout.' . $flexible_template_type, $flexible_template_name)) {
+      $item = layout_flexible_template_load($flexible_template_name, $flexible_template_type);
     }
     $caches[$flexible_template_name] = $item;
   }
@@ -2322,11 +2326,13 @@ function layout_flexible_tempstore_load($flexible_template_name = NULL) {
  *
  * @param string $flexible_template_name
  *   The machine name of the template to load.
+ * @param string $flexible_type
+ *   The type of flexible template to load. Defaults to 'flexible'.
  *
  * @return LayoutFlexibleTemplate|false
  */
-function layout_flexible_template_load($flexible_template_name = NULL) {
-  $all_templates = layout_flexible_template_load_all();
+function layout_flexible_template_load($flexible_template_name = NULL, $flexible_type = 'flexible') {
+  $all_templates = layout_flexible_template_load_all($flexible_type);
   if (isset($all_templates[$flexible_template_name])) {
     return $all_templates[$flexible_template_name];
   }
@@ -2336,7 +2342,7 @@ function layout_flexible_template_load($flexible_template_name = NULL) {
 }
 
 /**
- * Load flexible templates by type. Defaults to 'flexible'.
+ * Load all flexible templates by type. Defaults to 'flexible'.
  *
  * @return LayoutFlexibleTemplate[]
  */

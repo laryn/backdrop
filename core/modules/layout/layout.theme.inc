@@ -326,13 +326,14 @@ function layout_preprocess_layout(&$variables) {
 
   // Build HTML for displaying flexible templates.
   if (isset($variables['layout_info']['template']) && ($variables['layout_info']['template'] == 'layout--flexible')) {
-    if (is_object($variables['renderer']) && !empty($variables['layout_info']['flexible'])) {
+    $flexible_template_type = (!empty($variables['layout_info']['layout_template_type']) && $variables['layout_info']['layout_template_type'] != 'layout') ? $variables['layout_info']['layout_template_type'] : 'flexible';
+    if (is_a($variables['renderer'], 'LayoutRendererFlexible')) {
       $variables['flexible_editor'] = TRUE;
-      $flexible_layout = layout_flexible_tempstore_load($variables['layout_info']['name']);
+      $flexible_layout = layout_flexible_tempstore_load($variables['layout_info']['name'], $flexible_template_type);
     }
     else {
       $variables['flexible_editor'] = FALSE;
-      $flexible_layout = layout_flexible_template_load($variables['layout_info']['name']);
+      $flexible_layout = layout_flexible_template_load($variables['layout_info']['name'], $flexible_template_type);
     }
     $variables['region_buttons'] = array();
     if (isset($variables['renderer']->region_buttons)) {
