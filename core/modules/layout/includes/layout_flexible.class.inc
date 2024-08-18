@@ -3,6 +3,10 @@
  * @file
  * Class that holds configuration for a flexible layout template configuration.
  */
+
+/**
+ *
+ */
 class LayoutFlexibleTemplate {
   /**
    * The name of the layout template.
@@ -43,6 +47,11 @@ class LayoutFlexibleTemplate {
    * @var bool
    */
   public $is_new;
+
+  /**
+   * @var string
+   */
+  public $layout_template_type = 'flexible';
 
   /**
    * Constructor for a LayoutFlexibleTemplate class.
@@ -92,7 +101,7 @@ class LayoutFlexibleTemplate {
       'rows' => $this->rows,
     );
 
-    config('layout.flexible.' . $this->name)
+    config('layout.' . $this->layout_template_type . '.' . $this->name)
       ->setData($data)
       ->save();
 
@@ -116,4 +125,3 @@ class LayoutFlexibleTemplate {
     backdrop_theme_rebuild();
   }
 }
-

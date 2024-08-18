@@ -2311,14 +2311,14 @@ function layout_flexible_tempstore_load($flexible_template_name = NULL, $flexibl
   }
 
   $caches = &backdrop_static(__FUNCTION__, array());
-  if (!isset($caches[$flexible_template_name])) {
+  if (!isset($caches[$flexible_template_type . ':' . $flexible_template_name])) {
     if (!$item = tempstore_get('layout.' . $flexible_template_type, $flexible_template_name)) {
       $item = layout_flexible_template_load($flexible_template_name, $flexible_template_type);
     }
-    $caches[$flexible_template_name] = $item;
+    $caches[$flexible_template_type . ':' . $flexible_template_name] = $item;
   }
 
-  return $caches[$flexible_template_name];
+  return $caches[$flexible_template_type . ':' . $flexible_template_name];
 }
 
 /**
