@@ -210,16 +210,16 @@ class LayoutRendererStandard {
    * regularly make additions to the set of blocks that will be rendered.
    *
    * @param array $blocks
-   *  An associative array of block data (Block objects), keyed by UUID.
+   *   An associative array of block data (Block objects), keyed by UUID.
    * @return array
-   *  An associative array of blocks to be rendered, keyed on UUID and sorted
-   *  into proper rendering order.
+   *   An associative array of blocks to be rendered, keyed on UUID and sorted
+   *   into proper rendering order.
    */
   function prepareBlocks(array $blocks) {
-    // Use local variables as writing to them is very slightly faster
+    // Use local variables as writing to them is very slightly faster.
     $first = $normal = $last = array();
 
-    // Prepare the list of blocks to be rendered
+    // Prepare the list of blocks to be rendered.
     foreach ($blocks as $uuid => $block) {
 
       // Check access on each block.
@@ -358,7 +358,7 @@ class LayoutRendererStandard {
    * Render the entire layout and attach meta data.
    *
    * @return string
-   *  Themed & rendered HTML output.
+   *   Themed & rendered HTML output.
    */
   function render() {
     $this->addMeta();
@@ -402,7 +402,14 @@ class LayoutRendererStandard {
     else {
       $theme = str_replace('-', '_', $this->layout_template_info['template']);
     }
-    $this->rendered['layout'] = theme($theme, array('content' => $this->rendered['regions'], 'settings' => $this->layout->settings, 'layout' => $this->layout, 'layout_info' => $this->layout_template_info, 'renderer' => $this, 'admin' => $this->admin));
+    $this->rendered['layout'] = theme($theme, array(
+      'content' => $this->rendered['regions'],
+      'settings' => $this->layout->settings,
+      'layout' => $this->layout,
+      'layout_template_info' => $this->layout_template_info,
+      'renderer' => $this,
+      'admin' => $this->admin,
+    ));
     return $this->prefix . $this->rendered['layout'] . $this->suffix;
   }
 

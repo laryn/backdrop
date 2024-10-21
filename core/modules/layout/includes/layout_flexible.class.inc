@@ -51,7 +51,17 @@ class LayoutFlexibleTemplate {
   /**
    * @var string
    */
-  public $layout_template_type = 'flexible';
+  public $preview;
+
+  /**
+   * @var string
+   */
+  public $layout_template_type;
+
+  /**
+   * @var bool
+   */
+  public $is_full_page;
 
   /**
    * Constructor for a LayoutFlexibleTemplate class.
@@ -63,16 +73,21 @@ class LayoutFlexibleTemplate {
     foreach ($config as $property => $property_value) {
       $this->{$property} = $property_value;
     }
+    if ($this->is_full_page === NULL) {
+      $this->is_full_page = TRUE;
+    }
 
     if (empty($this->rows)) {
       $uuid = new Uuid();
-      $this->rows[$uuid->generate()] = array(
-        'contains' => 'region_12',
-        'element' => 'header',
-        'classes' => '',
-        'container' => 'container',
-        'region_names' => array('region_0' => array('label' => t('Header'), 'name' => 'header', 'classes' => '')),
-      );
+      if ($this->is_full_page) {
+        $this->rows[$uuid->generate()] = array(
+          'contains' => 'region_12',
+          'element' => 'header',
+          'classes' => '',
+          'container' => 'container',
+          'region_names' => array('region_0' => array('label' => t('Header'), 'name' => 'header', 'classes' => '')),
+        );
+      }
       $this->rows[$uuid->generate()] = array(
         'contains' => 'region_12',
         'element' => '',
@@ -80,13 +95,16 @@ class LayoutFlexibleTemplate {
         'container' => 'container',
         'region_names' => array('region_0' => array('label' => t('Content'), 'name' => 'content', 'classes' => '')),
       );
-      $this->rows[$uuid->generate()] = array(
-        'contains' => 'region_12',
-        'element' => 'footer',
-        'classes' => '',
-        'container' => 'container',
-        'region_names' => array('region_0' => array('label' => t('Footer'), 'name' => 'footer', 'classes' => '')),
-      );
+      if ($this->is_full_page) {
+        $this->rows[$uuid->generate()] = array(
+          'contains' => 'region_12',
+          'element' => 'footer',
+          'classes' => '',
+          'container' => 'container',
+          'region_names' => array('region_0' => array('label' => t('Footer'), 'name' => 'footer', 'classes' => '')),
+        );
+      }
+
     }
   }
 
@@ -99,6 +117,8 @@ class LayoutFlexibleTemplate {
       'title' => $this->title,
       'description' => $this->description,
       'rows' => $this->rows,
+      'preview' => $this->preview,
+      'is_full_page' => $this->is_full_page,
     );
 
     config('layout.' . $this->layout_template_type . '.' . $this->name)
