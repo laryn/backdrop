@@ -754,7 +754,7 @@ function layout_theme() {
       'template' => 'templates/layout-content-form',
       'render element' => 'form',
     ) + $base,
-    'layout_template_info' => array(
+    'layout_info' => array(
       'variables' => array('layout' => NULL),
     ) + $base,
     'layout_condition_info' => array(
@@ -1491,13 +1491,15 @@ function layout_flush_caches() {
 function layout_reset_caches() {
   cache()->delete('layout:layout:config');
   cache()->delete('layout:menu_item:config');
-  cache()->delete('layout_template_info');
+  cache()->delete('layout_template_info:layout');
+  cache()->delete('layout_template_info:flexible');
   cache('layout_path')->flush();
 
   backdrop_static_reset('layout_load_multiple');
   backdrop_static_reset('layout_menu_item_load_multiple');
   backdrop_static_reset('layout_get_path_layout_names');
-  backdrop_static_reset('layout_get_layout_template_info');
+  backdrop_static_reset('layout_get_layout_template_info:layout');
+  backdrop_static_reset('layout_get_layout_template_info:flexible');
   backdrop_static_reset('layout_get_block_info');
   backdrop_static_reset('layout_get_layout_tempstore');
   backdrop_static_reset('_layout_include_files');
@@ -1578,12 +1580,12 @@ function _layout_get_all_info($data_type, $init = array()) {
  * @see hook_layout_template_info()
  * @see hook_layout_info()
  */
-function layout_get_layout_template_info($template_name = NULL, $rebuild = FALSE) {
-  $info = &backdrop_static(__FUNCTION__);
+function layout_get_layout_template_info($template_name = NULL, $rebuild = FALSE, $layout_template_type = 'layout') {
+  $info = &backdrop_static(__FUNCTION__ . ':' . $layout_template_type);
 
   // Try getting a cached list of layout info.
   if (!isset($info) && !$rebuild) {
-    $cache = cache('cache')->get('layout_template_info');
+    $cache = cache('cache')->get('layout_template_info:' . $layout_template_type);
 
     if ($cache && $cache->data) {
       $info = $cache->data;
@@ -1592,21 +1594,23 @@ function layout_get_layout_template_info($template_name = NULL, $rebuild = FALSE
 
   // Rebuild the list of layout info.
   if (!isset($info) || $rebuild) {
-    $files = backdrop_system_listing('/^' . BACKDROP_PHP_FUNCTION_PATTERN . '\.info$/', 'layouts', 'name', 0);
     $init = array();
+    if ($layout_template_type == 'layout') {
+      $files = backdrop_system_listing('/^' . BACKDROP_PHP_FUNCTION_PATTERN . '\.info$/', 'layouts', 'name', 0);
 
-    foreach ($files as $name => $file) {
-      $init[$name] = backdrop_parse_info_file($file->uri);
+      foreach ($files as $name => $file) {
+        $init[$name] = backdrop_parse_info_file($file->uri);
 
-      // Skip modules or themes that have been placed in the wrong directory.
-      if (isset($init[$name]['type']) && $init[$name]['type'] != 'layout') {
-        unset($init[$name]);
-        continue;
+        // Skip modules or themes that have been placed in the wrong directory.
+        if (isset($init[$name]['type']) && $init[$name]['type'] != 'layout') {
+          unset($init[$name]);
+          continue;
+        }
+
+        $init[$name]['path'] = dirname($file->uri);
+        $init[$name]['title'] = $init[$name]['name'];
+        $init[$name]['name'] = $name;
       }
-
-      $init[$name]['path'] = dirname($file->uri);
-      $init[$name]['title'] = $init[$name]['name'];
-      $init[$name]['name'] = $name;
     }
     $info = _layout_get_all_info('layout_template', $init);
     // Account for implementations of the deprecated hook_layout_info().
@@ -1636,7 +1640,7 @@ function layout_get_layout_template_info($template_name = NULL, $rebuild = FALSE
     // Sort the available layouts by display name.
     backdrop_sort($info, array('title' => SORT_STRING));
 
-    cache('cache')->set('layout_template_info', $info);
+    cache('cache')->set('layout_template_info:' . $layout_template_type, $info);
   }
 
   if ($template_name) {
@@ -2312,7 +2316,7 @@ function layout_flexible_tempstore_load($flexible_template_name = NULL, $flexibl
     return new LayoutFlexibleTemplate();
   }
 
-  $caches = &backdrop_static(__FUNCTION__ . '__' . $flexible_template_type, array());
+  $caches = &backdrop_static(__FUNCTION__ . ':' . $flexible_template_type, array());
   if (!isset($caches[$flexible_template_type . ':' . $flexible_template_name])) {
     if (!$item = tempstore_get('layout.' . $flexible_template_type, $flexible_template_name)) {
       $item = layout_flexible_template_load($flexible_template_name, $flexible_template_type);
@@ -2349,7 +2353,7 @@ function layout_flexible_template_load($flexible_template_name = NULL, $flexible
  * @return LayoutFlexibleTemplate[]
  */
 function layout_flexible_template_load_all($flexible_type = 'flexible') {
-  $templates = &backdrop_static(__FUNCTION__ . '__' . $flexible_type, array());
+  $templates = &backdrop_static(__FUNCTION__ . ':' . $flexible_type, array());
 
   if (empty($templates)) {
     $cache = cache()->get('layout:' . $flexible_type . ':config');
@@ -2454,8 +2458,8 @@ function layout_layout_presave($layout) {
 function layout_flexible_reset_caches() {
   cache()->delete('layout:flexible:config');
 
-  backdrop_static_reset('layout_flexible_template_load_all__flexible');
-  backdrop_static_reset('layout_flexible_tempstore_load__flexible');
+  backdrop_static_reset('layout_flexible_template_load_all:flexible');
+  backdrop_static_reset('layout_flexible_tempstore_load:flexible');
 }
 
 /**

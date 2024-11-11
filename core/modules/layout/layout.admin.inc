@@ -123,7 +123,7 @@ function layout_list_page() {
       $template = l($info['title'], 'admin/structure/layouts/manage/' . $layout->name . '/configure');
 
       $row = array();
-      $row[] = theme('layout_template_info', array('layout' => $layout));
+      $row[] = theme('layout_info', array('layout' => $layout));
       $row[] = $template;
       $row[] = theme('layout_condition_info', array('layout' => $layout));
       $row[] = $storage;
