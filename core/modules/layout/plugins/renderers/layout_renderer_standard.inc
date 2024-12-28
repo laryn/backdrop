@@ -185,11 +185,11 @@ class LayoutRendererStandard {
   function prepare() {
     // Set the custom page title. Note this may be overridden in prepareBlocks()
     // by copying a title from a block.
-    if ($this->layout->settings['title_display'] === LAYOUT_TITLE_CUSTOM) {
-      $this->page_title = t($this->layout->settings['title']);
-    }
-    elseif ($this->layout->settings['title_display'] === LAYOUT_TITLE_NONE) {
+    if (!$this->is_full_page || $this->layout->settings['title_display'] === LAYOUT_TITLE_NONE) {
       $this->page_title = FALSE;
+    }
+    elseif ($this->layout->settings['title_display'] === LAYOUT_TITLE_CUSTOM) {
+      $this->page_title = t($this->layout->settings['title']);
     }
 
     $this->prepareBlocks($this->layout->content);
