@@ -58,13 +58,13 @@ function hook_layout_template_info() {
     ),
 
     // Optional information that populates using defaults.
-    // 'preview' => 'preview.png',
-    // 'stylesheets' => array('all' => array('one-column.css')),
-    // 'template' => 'layout--my-layout-template',
-    // 'is_full_page' => TRUE,
+    'preview' => 'preview.png',
+    'stylesheets' => array('all' => array('one-column.css')),
+    'template' => 'layout--my-layout-template',
+    'is_full_page' => TRUE,
 
     // Specify a file containing preprocess functions if needed.
-    // 'file' => 'my_layout_template.php',
+    'file' => 'my_layout_template.php',
   );
   return $layout_templates;
 }
@@ -72,7 +72,7 @@ function hook_layout_template_info() {
   /**
    * Deprecated. Now replaced by hook_layout_template_info().
    *
-   * @deprecated since 1.29.0
+   * @deprecated since 1.30.0
    */
 function hook_layout_info() {
   $layouts['my_layout'] = array(
