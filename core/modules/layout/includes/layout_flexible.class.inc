@@ -59,9 +59,12 @@ class LayoutFlexibleTemplate {
   public $layout_template_type;
 
   /**
+   * Whether this layout is a full page layout (for example, with a header and
+   * footer, optional page title) or not.
+   *
    * @var bool
    */
-  public $is_full_page;
+  public $is_full_page = TRUE;
 
   /**
    * Constructor for a LayoutFlexibleTemplate class.
